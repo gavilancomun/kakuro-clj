@@ -30,24 +30,17 @@
                       (map #(if (contains? values %) % "."))
                       (apply str)))))))
 
+(defn draw-row [row]
+  (str (apply str (map draw row)) "\n"))
+
+(defn draw-grid [grid]
+  (apply str (map draw-row grid)))
+
 (def v (->Value #{1 2 3 4 5 6 7 8 9}))
 (def e (->Empty))
 (defn d [n] (->Down n))
 (defn a [n] (->Across n))
 (defn da [d a] (->DownAcross d a))
-
-(def grid1 [
-            [e (d 4) (d 22) e (d 16) (d 3)]
-            [(a 3) v v (da 16 6) v v ]
-            [(a 18) v v v v v]
-            [e (da 17 23) v v v (d 14)]
-            [(a 9) v v (a 6) v v]
-            [(a 15) v v (a 12) v v]
-           ])
-
-(defn draw-row [row] (str (apply str (map draw row)) "\n"))
-
-(defn draw-grid [grid] (apply str (map draw-row grid)))
 
 (defn all-different [nums]
   (= (count nums) (count (into #{} nums))))
@@ -111,3 +104,13 @@
     (if (= g orig)
       g
       (solver g))))
+
+(def grid1 [
+            [e (d 4) (d 22) e (d 16) (d 3)]
+            [(a 3) v v (da 16 6) v v ]
+            [(a 18) v v v v v]
+            [e (da 17 23) v v v (d 14)]
+            [(a 9) v v (a 6) v v]
+            [(a 15) v v (a 12) v v]
+           ])
+
