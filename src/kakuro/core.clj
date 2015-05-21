@@ -25,5 +25,7 @@
     (let [values (:values this)]
       (if (= 1 (count values))
         (first (map #(str "     " % "    ") values))
-        (str " " (apply str (map #(if (contains? values %) % ".") (range 1 10))))))))
+        (str " " (->> (range 1 10) 
+                      (map #(if (contains? values %) % "."))
+                      (apply str)))))))
 
