@@ -35,11 +35,6 @@
 (defn a [n] (->Across n))
 (defn da [d a] (->DownAcross d a))
 
-(defn create-values [n]
-  (->> (range 1 (+ 1 n))
-       (map (fn [_] v))
-       (into [])))
-
 (def grid1 [
             [e (d 4) (d 22) e (d 16) (d 3)]
             [(a 3) v v (da 16 6) v v ]
@@ -49,7 +44,14 @@
             [(a 15) v v (a 2) v v]
            ])
 
-(defn draw-row [row]
-  (str (apply str (map draw row)) "\n"))
+(defn draw-row [row] (str (apply str (map draw row)) "\n"))
 
 (defn draw-grid [grid] (apply str (map draw-row grid)))
+
+(defn row-across-sums [row]
+  (->> (range 0 (count row))
+       (filter #(:across (get row %)))
+       (map #(->[(:across (get row %)) (take-while (fn [c] (:values c)) (drop (inc %) row))]))
+    ))
+
+(defn create-across-sums [grid] (map row-across-sums grid))
