@@ -1,4 +1,5 @@
-(ns kakuro.core)
+(ns kakuro.core
+  (:require [clojure.pprint :as pprint]))
 
 (defprotocol Cell
   (draw [this]))
@@ -41,7 +42,7 @@
             [(a 18) v v v v v]
             [e (da 17 23) v v v (d 14)]
             [(a 9) v v (a 6) v v]
-            [(a 15) v v (a 2) v v]
+            [(a 15) v v (a 12) v v]
            ])
 
 (defn draw-row [row] (str (apply str (map draw row)) "\n"))
@@ -79,9 +80,11 @@
 (defn permute-all [vs total]
   (permute vs 0 total []))
 
-(defn is-possible? [cell v] (contains? (:values cell) v))
+(defn is-possible? [cell n]
+  (contains? (:values cell) n))
 
-(defn transpose [m] (apply mapv vector m))
+(defn transpose [m]
+  (apply mapv vector m))
 
 (defn solve-step [cells total]
   (let [final (dec (count cells))
@@ -92,3 +95,14 @@
          transpose
          (map #(->Value (into #{} %))))))
 
+(defn solve-pair [[nvs vs]]
+  (if (seq vs)
+    (concat nvs (solve-step (into [] vs) (:across (last nvs))))
+    nvs))
+
+(defn solve-row [row]
+  (let [pairs (partition-all 2 (partition-by #(= (type %) (type v)) row))]
+    (into [] (mapcat solve-pair pairs))))
+
+(defn solve-grid [grid]
+  (mapv solve-row grid))
