@@ -48,10 +48,30 @@
 
 (defn draw-grid [grid] (apply str (map draw-row grid)))
 
+(defn row-sum [row c]
+   [(:across (get row c))
+    (take-while #(:values %) (drop (inc c) row))])
+
 (defn row-across-sums [row]
   (->> (range 0 (count row))
        (filter #(:across (get row %)))
-       (map #(->[(:across (get row %)) (take-while (fn [c] (:values c)) (drop (inc %) row))]))
-    ))
+       (map #(row-sum row %))
+       (into [])))
 
 (defn create-across-sums [grid] (map row-across-sums grid))
+
+(defn create-down-sums [grid]
+  )
+
+(defn permute [cells pos target so-far]
+  (if (>= target 1)
+    (if (= pos (dec (count cells)))
+      [(conj so-far target)]
+      (->> (get cells pos)
+           :values
+           (mapcat #(permute cells (inc pos) (- target %)  (conj so-far %)))
+           (into [])))
+    []))
+
+(defn permute-all [cells total]
+  (permute cells 0 total []))
