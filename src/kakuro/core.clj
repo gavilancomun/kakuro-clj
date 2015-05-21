@@ -63,15 +63,32 @@
 (defn create-down-sums [grid]
   )
 
-(defn permute [cells pos target so-far]
+(defn all-different [nums]
+  (= (count nums) (count (into #{} nums))))
+
+(defn permute [vs pos target so-far]
   (if (>= target 1)
-    (if (= pos (dec (count cells)))
+    (if (= pos (dec (count vs)))
       [(conj so-far target)]
-      (->> (get cells pos)
+      (->> (get vs pos)
            :values
-           (mapcat #(permute cells (inc pos) (- target %)  (conj so-far %)))
+           (mapcat #(permute vs (inc pos) (- target %) (conj so-far %)))
            (into [])))
     []))
 
-(defn permute-all [cells total]
-  (permute cells 0 total []))
+(defn permute-all [vs total]
+  (permute vs 0 total []))
+
+(defn is-possible? [cell v] (contains? (:values cell) v))
+
+(defn transpose [m] (apply mapv vector m))
+
+(defn solve-step [cells total]
+  (let [final (dec (count cells))
+        perms (->> (permute-all cells total)
+         (filter #(is-possible? (get cells final) (get % final)))
+         (filter all-different))]
+    (->> perms
+         transpose
+         (map #(->Value (into #{} %))))))
+
