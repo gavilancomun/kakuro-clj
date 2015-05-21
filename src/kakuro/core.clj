@@ -106,3 +106,10 @@
 
 (defn solve-grid [grid]
   (mapv solve-row grid))
+
+(defn solver [grid]
+  (let [orig grid
+        g (solve-grid grid)]
+    (if (= g orig)
+      g
+      (solver g))))
