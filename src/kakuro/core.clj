@@ -49,21 +49,6 @@
 
 (defn draw-grid [grid] (apply str (map draw-row grid)))
 
-(defn row-sum [row c]
-   [(:across (get row c))
-    (take-while #(:values %) (drop (inc c) row))])
-
-(defn row-across-sums [row]
-  (->> (range 0 (count row))
-       (filter #(:across (get row %)))
-       (map #(row-sum row %))
-       (into [])))
-
-(defn create-across-sums [grid] (map row-across-sums grid))
-
-(defn create-down-sums [grid]
-  )
-
 (defn all-different [nums]
   (= (count nums) (count (into #{} nums))))
 
@@ -104,8 +89,21 @@
   (let [pairs (partition-all 2 (partition-by #(= (type %) (type v)) row))]
     (into [] (mapcat solve-pair pairs))))
 
+(defn solve-col-pair [[nvs vs]]
+  (if (seq vs)
+    (concat nvs (solve-step (into [] vs) (:down (last nvs))))
+    nvs))
+
+(defn solve-column [column]
+  (let [pairs (partition-all 2 (partition-by #(= (type %) (type v)) column))]
+    (into [] (mapcat solve-col-pair pairs))))
+
 (defn solve-grid [grid]
-  (mapv solve-row grid))
+  (->> grid
+       (mapv solve-row)
+       transpose
+       (mapv solve-column)
+       transpose))
 
 (defn solver [grid]
   (let [orig grid
