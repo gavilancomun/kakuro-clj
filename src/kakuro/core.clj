@@ -73,23 +73,20 @@
          transpose
          (map #(->Value (into #{} %))))))
 
-(defn solve-pair [[nvs vs]]
+(defn solve-pair [k [nvs vs]]
   (if (seq vs)
-    (concat nvs (solve-step (into [] vs) (:across (last nvs))))
+    (concat nvs (solve-step (into [] vs) (k (last nvs))))
     nvs))
+
+(defn solve-line [line pair-solver]
+  (let [pairs (partition-all 2 (partition-by #(= (type %) (type v)) line))]
+    (into [] (mapcat pair-solver pairs))))
 
 (defn solve-row [row]
-  (let [pairs (partition-all 2 (partition-by #(= (type %) (type v)) row))]
-    (into [] (mapcat solve-pair pairs))))
-
-(defn solve-col-pair [[nvs vs]]
-  (if (seq vs)
-    (concat nvs (solve-step (into [] vs) (:down (last nvs))))
-    nvs))
+  (solve-line row #(solve-pair :across %)))
 
 (defn solve-column [column]
-  (let [pairs (partition-all 2 (partition-by #(= (type %) (type v)) column))]
-    (into [] (mapcat solve-col-pair pairs))))
+  (solve-line column #(solve-pair :down %)))
 
 (defn solve-grid [grid]
   (->> grid
