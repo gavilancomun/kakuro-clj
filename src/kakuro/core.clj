@@ -29,7 +29,7 @@
                       (map #(if (contains? values %) % "."))
                       (apply str)))))))
 
-(def val9 (->Value #{1 2 3 4 5 6 7 8 9}))
+(def v (->Value #{1 2 3 4 5 6 7 8 9}))
 (def e (->Empty))
 (defn d [n] (->Down n))
 (defn a [n] (->Across n))
@@ -37,16 +37,16 @@
 
 (defn create-values [n]
   (->> (range 1 (+ 1 n))
-       (map (fn [_] val9))
+       (map (fn [_] v))
        (into [])))
 
 (def grid1 [
             [e (d 4) (d 22) e (d 16) (d 3)]
-            [(a 3) val9 val9 (da 16 6) val9 val9 ]
-            [(a 18) val9 val9 val9 val9 val9]
-            [e (da 17 23) val9 val9 val9 (d 14)]
-            [(a 9) val9 val9 (a 6) val9 val9]
-            [(a 15) val9 val9 (a 2) val9 val9]
+            [(a 3) v v (da 16 6) v v ]
+            [(a 18) v v v v v]
+            [e (da 17 23) v v v (d 14)]
+            [(a 9) v v (a 6) v v]
+            [(a 15) v v (a 2) v v]
            ])
 
 (defn draw-row [row]
