@@ -49,7 +49,7 @@
   (if (>= target 1)
     (if (= (count so-far) (dec (count vs)))
       [(conj so-far target)]
-      (->> (get vs pos)
+      (->> (get vs (count so-far))
            :values
            (mapcat #(permute vs (- target %) (conj so-far %)))
            (into [])))
