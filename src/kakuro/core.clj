@@ -45,18 +45,18 @@
 (defn all-different [nums]
   (= (count nums) (count (into #{} nums))))
 
-(defn permute [vs pos target so-far]
+(defn permute [vs target so-far]
   (if (>= target 1)
-    (if (= pos (dec (count vs)))
+    (if (= (count so-far) (dec (count vs)))
       [(conj so-far target)]
       (->> (get vs pos)
            :values
-           (mapcat #(permute vs (inc pos) (- target %) (conj so-far %)))
+           (mapcat #(permute vs (- target %) (conj so-far %)))
            (into [])))
     []))
 
 (defn permute-all [vs total]
-  (permute vs 0 total []))
+  (permute vs total []))
 
 (defn is-possible? [cell n]
   (contains? (:values cell) n))
