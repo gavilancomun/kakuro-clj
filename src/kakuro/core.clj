@@ -96,9 +96,8 @@
        transpose))
 
 (defn solver [grid]
-  (let [orig grid
-        g (solve-grid grid)]
-    (if (= g orig)
+  (let [g (solve-grid grid)]
+    (if (= g grid)
       g
       (solver g))))
 
