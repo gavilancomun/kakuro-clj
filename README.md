@@ -1,3 +1,3 @@
-# kakuro-clj
+# kakuro-clojure
 
 kakuro in clojure
