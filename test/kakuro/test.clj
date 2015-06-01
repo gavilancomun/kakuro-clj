@@ -15,9 +15,24 @@
             [(a 15) v v (a 12) v v]
            ])
 
-(deftest test-solver
+(def grid2 [[e (d 23) (d 30) e e (d 27) (d 12) (d 16)]
+            [(a 16) v v e (da 17 24) v v v]
+            [(a 17) v v (da 15 29) v v v v]
+            [(a 35) v v v v v (d 12) e]
+            [e (a 7) v v (da 7 8) v v (d 7)]
+            [e (d 11) (da 10 16) v v v v v]
+            [(a 21) v v v v (a 5) v v]
+            [(a 6) v v v e (a 3) v v]
+            ])
+
+(deftest test-grid1
   (let [result (-> grid1 solver draw-grid)
         expected "     3         9    \n"]
+    (is (= expected (.substring result (- (count result) (count expected)))))))
+
+(deftest test-grid2
+  (let [result (-> grid2 solver draw-grid)
+        expected "     2         1    \n"]
     (is (= expected (.substring result (- (count result) (count expected)))))))
 
 (ct/defspec test-transpose
