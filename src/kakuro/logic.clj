@@ -2,7 +2,8 @@
   (:refer-clojure :exclude [== >= <= > < =])
   (:require [clojure.core :as core]
             [clojure.core.logic :as cl]
-            [clojure.core.logic.fd :as fd]))
+            [clojure.core.logic.fd :as fd]
+            [kakuro.core]))
 
 ;; total is a concrete integer on initial call, then an lvar on recursion.
 (defn nary-plus [total vars]
@@ -29,15 +30,15 @@
         (nary-plus total vars)))
     cl/succeed))
 
-(defn logic-line [line pair-solver]
+(defn logic-line [line k]
   (let [pairs (partition-all 2 (partition-by #(:values (first %)) line))]
-    (cl/everyg pair-solver pairs)))
+    (cl/everyg #(logic-pair k %) pairs)))
 
 (defn logic-row [row]
-  (logic-line row #(logic-pair :across %)))
+  (logic-line row :across))
 
 (defn logic-column [column]
-  (logic-line column #(logic-pair :down %)))
+  (logic-line column :down))
 
 (defn logic-grid [grid]
   (let [lgrid (lvar-grid grid)
