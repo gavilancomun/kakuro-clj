@@ -4,14 +4,7 @@
   (:require [clojure.core.logic :as cl])
   (:require [clojure.core.logic.fd :as fd]))
 
-(defn solve-sum [sum]
-  (cl/run* [q]
-           (cl/fresh [a b]
-                     (cl/everyg #(fd/in % (fd/domain 1 2 3 4 5 6 7 8 9)) [a b])
-                     (fd/+ a b sum)
-                     (fd/distinct [a b])
-                     (cl/== q [a b]))))
-
+;; sum is a concrete integer on initial call, then an lvar on recursion.
 (defn nary-plus [sum vars]
   (cond
     (core/= 1 (count vars)) (cl/== (first vars) sum)
