@@ -3,6 +3,9 @@
   (:use clojure.core.logic)
   (:require [clojure.core.logic.fd :as fd]))
 
+;; Example code from the core.logic wiki
+;; This shows many core.logic aspects that will be useful to solve kakuro.
+
 (defn get-square [rows x y]
   (for [x (range x (+ x 3))
         y (range y (+ y 3))]
