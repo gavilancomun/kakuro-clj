@@ -41,7 +41,7 @@
 
 (defn logic-grid [grid]
   (let [lgrid (lvar-grid grid)
-        vars (->> lgrid (mapcat identity) (map second) (filter #(not (nil? %))))]
+        vars (->> lgrid flatten (filter cl/lvar?))]
     (if (seq vars)
       (cl/run* [q]
                (cl/everyg #(fd/in % (apply fd/domain (range 1 10))) vars)
