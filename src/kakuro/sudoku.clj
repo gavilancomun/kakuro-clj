@@ -26,9 +26,9 @@
                    y (range 0 9 3)]
                (get-square rows x y))]
     (run 1 [q]
-      (== q vars)
-      (everyg #(fd/in % (fd/domain 1 2 3 4 5 6 7 8 9)) vars)
-      (init vars hints)
-      (everyg fd/distinct rows)
-      (everyg fd/distinct cols)
-      (everyg fd/distinct sqs))))
+         (== q vars)
+         (everyg #(fd/in % (fd/domain 1 2 3 4 5 6 7 8 9)) vars)
+         (init vars hints)
+         (everyg fd/distinct rows)
+         (everyg fd/distinct cols)
+         (everyg fd/distinct sqs))))

@@ -4,7 +4,7 @@
   (:require [clojure.core.logic :as cl])
   (:require [clojure.core.logic.fd :as fd]))
 
-;; sum is a concrete integer on initial call, then an lvar on recursion.
+;; total is a concrete integer on initial call, then an lvar on recursion.
 (defn nary-plus [total vars]
   (cond
     (core/= 1 (count vars)) (cl/== (first vars) total)
@@ -23,13 +23,49 @@
                (fd/distinct vars)      
                (cl/== q vars)))))
 
-(defn solve-cells [cells total]
+(defn solve-cells-vars [cells vars total]
   (let [n (count cells)]
     (if (core/> n 0)
-      (let [vars (repeatedly n cl/lvar)]
         (cl/run* [q]
                  (cl/everyg #(fd/in (first %) (apply fd/domain (into (sorted-set) (:values (second %))))) (map vector vars cells))
                  (nary-plus total vars)
                  (fd/distinct vars)      
-                 (cl/== q vars))))))
+                 (cl/== q vars)))))
+
+(defn solve-cells [cells total]
+  (when (core/> (count cells) 0)
+    (solve-cells-vars cells (repeatedly (count cells) cl/lvar) total)))
+
+(defn solve-vars [vars total]
+  (if (seq vars)
+    (cl/run* [q]
+             (cl/everyg #(fd/in % (apply fd/domain (range 1 10))) vars)
+             (nary-plus total vars)
+             (fd/distinct vars)      
+             (cl/== q vars))))
+
+(defn lvar-row [row]
+  (mapv #(if (:values %) [% cl/lvar] [% nil]) row))
+
+(defn lvar-grid [grid]
+  (mapv lvar-row grid))
+
+(defn logic-pair [k [nvs vs]]
+  (when (seq vs)
+    [ (map second vs) (k (first (last nvs)))]))
+
+(defn logic-line [line pair-solver]
+  (let [pairs (partition-all 2 (partition-by #(core/= (type (first %)) (type kakuro.core/v)) line))]
+    (map pair-solver pairs)))
+
+(defn logic-row [row]
+  (logic-line row #(logic-pair :across %)))
+
+(defn logic-column [column]
+  (logic-line column #(logic-pair :down %)))
+
+(defn logic-grid [grid]
+  (->> grid
+       lvar-grid
+       (map logic-row)))
 
