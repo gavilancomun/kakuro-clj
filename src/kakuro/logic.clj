@@ -1,5 +1,6 @@
 (ns kakuro.logic
   (:refer-clojure :exclude [== >= <= > < =])
+  (:require [clojure.core :as core])
   (:require [clojure.core.logic.fd :as fd])
   (:require [clojure.core.logic.arithmetic :as cla])
   (:require [clojure.core.logic :as cl]))
@@ -12,15 +13,17 @@
       (fd/distinct [a b])
       (cl/== q [a b]))))
 
-(defn nary-plus [vars sum]
-  )
+(defn nary-plus [sum vars]
+  (cond
+    (core/= 1 (count vars)) (cl/== (first vars) sum)
+    (core/= 2 (count vars)) (fd/+ (first vars) (second vars) sum)
+    :else cl/succeed))
 
 (defn solve-sum-n [n sum]
-  (let [vars (repeatedly n cl/lvar)
-        accs (repeatedly (dec n) cl/lvar)]
+  (let [vars (repeatedly n cl/lvar)]
     (cl/run* [q]
-      (cl/everyg #(fd/in % (apply fd/domain (range 1 (inc sum)))) accs)
-      (cl/everyg #(fd/in % (apply fd/domain (range 1 4))) vars)
+      (cl/everyg #(fd/in % (apply fd/domain (range 1 10))) vars)
+      (nary-plus sum vars)
       (fd/distinct vars)      
       (cl/== q vars))))
 
