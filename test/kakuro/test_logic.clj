@@ -1,5 +1,6 @@
 (ns kakuro.test-logic
     (:require [clojure.test :refer :all]
+              [kakuro.core :refer :all]
               [kakuro.logic :refer :all]))
 
 (deftest test-solve1
@@ -10,5 +11,10 @@
 (deftest test-solve2
   (let [result (solve-sum-n 3 6)
         expected [[1 2 3] [2 1 3] [1 3 2] [3 1 2] [2 3 1] [3 2 1]]]
+    (is (= expected result))))
+
+(deftest test-solve-cells
+  (let [result (solve-cells [(->Value #{1 2 3 4}) (->Value #{1 2 3 4})] 6)
+        expected [[2 4] [4 2]]]
     (is (= expected result))))
 

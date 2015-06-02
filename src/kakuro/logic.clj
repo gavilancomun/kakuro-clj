@@ -28,7 +28,7 @@
     (if (core/> n 0)
       (let [vars (repeatedly n cl/lvar)]
         (cl/run* [q]
-                 (cl/everyg #(fd/in %1 (apply fd/domain (into (sorted-set) (:values %2)))) vars cells)
+                 (cl/everyg #(fd/in (first %) (apply fd/domain (into (sorted-set) (:values (second %))))) (map vector vars cells))
                  (nary-plus total vars)
                  (fd/distinct vars)      
                  (cl/== q vars))))))
