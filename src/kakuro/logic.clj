@@ -1,9 +1,8 @@
 (ns kakuro.logic
   (:refer-clojure :exclude [== >= <= > < =])
   (:require [clojure.core :as core])
-  (:require [clojure.core.logic.fd :as fd])
-  (:require [clojure.core.logic.arithmetic :as cla])
-  (:require [clojure.core.logic :as cl]))
+  (:require [clojure.core.logic :as cl])
+  (:require [clojure.core.logic.fd :as fd]))
 
 (defn solve-sum [sum]
   (cl/run* [q]
