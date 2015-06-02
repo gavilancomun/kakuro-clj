@@ -18,9 +18,9 @@
     (core/= 1 (count vars)) (cl/== (first vars) sum)
     (core/= 2 (count vars)) (fd/+ (first vars) (second vars) sum)
     :else
-    (cl/fresh [next-sum]
-              (fd/- sum (last vars) next-sum)
-              (nary-plus next-sum (butlast vars)))))
+    (cl/fresh [acc]
+              (fd/+ (last vars) acc sum)
+              (nary-plus acc (butlast vars)))))
 
 (defn solve-sum-n [n sum]
   (if (core/> n 0)
