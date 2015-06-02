@@ -28,6 +28,7 @@
 (deftest test-grid1
   (let [result (-> grid1 solver draw-grid)
         expected "     3         9    \n"]
+    (println result)
     (is (= expected (.substring result (- (count result) (count expected)))))))
 
 (deftest test-grid2

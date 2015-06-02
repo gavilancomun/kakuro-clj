@@ -1,7 +1,31 @@
 (ns kakuro.test-logic
     (:require [clojure.test :refer :all]
+              [clojure.core.logic :as cl]
+              [clojure.core.logic.fd :as fd]
               [kakuro.core :refer :all]
               [kakuro.logic :refer :all]))
+
+(defn solve-sum-n [n total]
+  (if (> n 0)
+    (let [vars (repeatedly n cl/lvar)]
+      (cl/run* [q]
+               (cl/everyg #(fd/in % (apply fd/domain (range 1 10))) vars)
+               (nary-plus total vars)
+               (fd/distinct vars)      
+               (cl/== q vars)))))
+
+(defn solve-cells-vars [cells vars total]
+  (let [n (count cells)]
+    (if (> n 0)
+        (cl/run* [q]
+                 (cl/everyg #(fd/in (first %) (apply fd/domain (into (sorted-set) (:values (second %))))) (map vector vars cells))
+                 (nary-plus total vars)
+                 (fd/distinct vars)      
+                 (cl/== q vars)))))
+
+(defn solve-cells [cells total]
+  (when (> (count cells) 0)
+    (solve-cells-vars cells (repeatedly (count cells) cl/lvar) total)))
 
 (deftest test-solve1
   (let [result (solve-sum-n 2 6)
