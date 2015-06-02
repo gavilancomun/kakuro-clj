@@ -41,11 +41,12 @@
 
 (defn logic-grid [grid]
   (let [lgrid (lvar-grid grid)
-        vars (->> lgrid flatten (filter cl/lvar?))]
+        vars (->> lgrid flatten (filter cl/lvar?))
+        var-grid (mapv #(into [] (filter cl/lvar? (mapv second %))) lgrid)]
     (if (seq vars)
       (cl/run* [q]
                (cl/everyg #(fd/in % (apply fd/domain (range 1 10))) vars)
                (cl/everyg logic-row lgrid)
                (cl/everyg logic-column (kakuro.core/transpose lgrid))
-               (cl/== q vars)))))
+               (cl/== q var-grid)))))
 
