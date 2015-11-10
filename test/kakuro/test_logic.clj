@@ -44,4 +44,10 @@
     (is (= expected result))))
 
 (deftest test-grid1
-  (is (= nil (logic-grid kakuro.test/grid1))))
+  (let [expected [[[nil nil nil nil nil nil]
+                   [nil 1 2 nil 4 2]
+                   [nil 3 5 7 2 1]
+                   [nil nil 8 9 6 nil]
+                   [nil 8 1 nil 1 5]
+                   [nil 9 6 nil 3 9]]]]
+    (is (= expected (logic-grid kakuro.test/grid1)))))

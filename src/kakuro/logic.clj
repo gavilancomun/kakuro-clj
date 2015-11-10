@@ -43,7 +43,8 @@
 (defn logic-grid [grid]
   (let [lgrid (lvar-grid grid)
         vars (->> lgrid flatten (filter cl/lvar?))
-        var-grid (mapv #(->> % (map second) (filter cl/lvar?) vec) lgrid)]
+        var-grid (mapv #(->> % (map second)  vec)
+                       lgrid)]
     (if (seq vars)
       (cl/run* [q]
                (cl/everyg #(fd/in % (apply fd/domain (range 1 10))) vars)
