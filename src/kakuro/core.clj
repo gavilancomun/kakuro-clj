@@ -25,10 +25,9 @@
   (draw [this]
     (let [values (:values this)]
       (if (= 1 (count values))
-        (first (map #(str "     " % "    ") values))
-        (str " " (->> (range 1 10) 
-                      (map #(if (contains? values %) % "."))
-                      (apply str)))))))
+        (str "     " (first values) "    ")
+        (apply str " " (->> (range 1 10) 
+                            (map #(if (contains? values %) % "."))))))))
 
 (defn draw-row [row]
   (str (apply str (map draw row)) "\n"))

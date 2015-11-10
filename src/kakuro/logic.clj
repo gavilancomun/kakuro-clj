@@ -16,7 +16,7 @@
               (nary-plus acc (butlast vars)))))
 
 (defn lvar-row [row]
-  (mapv #(vector % (if (:values %) (cl/lvar) nil)) row))
+  (mapv #(vector % (when (:values %) (cl/lvar))) row))
 
 (defn lvar-grid [grid]
   (mapv lvar-row grid))
@@ -34,11 +34,11 @@
   (let [pairs (partition-all 2 (partition-by #(:values (first %)) line))]
     (cl/everyg #(logic-pair k %) pairs)))
 
-(defn logic-row [row]
-  (logic-line row :across))
+(defn logic-row [line]
+  (logic-line line :across))
 
-(defn logic-column [column]
-  (logic-line column :down))
+(defn logic-column [line]
+  (logic-line line :down))
 
 (defn logic-grid [grid]
   (let [lgrid (lvar-grid grid)
