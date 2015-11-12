@@ -51,7 +51,7 @@
         var-grid (mapv #(vec (map second %)) lgrid)]
     (if (seq vars)
       (cl/run* [q]
-               (cl/everyg #(fd/in % (apply fd/domain (range 1 10))) vars)
+               (cl/everyg #(fd/in % (fd/interval 1 9)) vars)
                (cl/everyg logic-row lgrid)
                (cl/everyg logic-column (kakuro.core/transpose lgrid))
                (cl/== q var-grid)))))
