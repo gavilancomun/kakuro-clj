@@ -26,8 +26,10 @@
             ])
 
 (deftest test-grid1
-  (let [result (-> grid1 solver draw-grid)
+  (let [solved (solver grid1)
+        result (-> grid1 solver draw-grid)
         expected "     3         9    \n"]
+    (clojure.pprint/pprint solved)
     (println result)
     (is (= expected (.substring result (- (count result) (count expected)))))))
 

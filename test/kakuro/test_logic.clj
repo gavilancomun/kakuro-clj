@@ -3,7 +3,8 @@
               [clojure.core.logic :as cl]
               [clojure.core.logic.fd :as fd]
               [kakuro.core :refer :all]
-              [kakuro.logic :refer :all]))
+              [kakuro.logic :refer :all]
+              [kakuro.test]))
 
 (defn solve-sum-n [n total]
   (if (> n 0)
@@ -42,3 +43,11 @@
         expected [[2 4] [4 2]]]
     (is (= expected result))))
 
+(deftest test-grid1
+  (let [expected [[[nil nil nil nil nil nil]
+                   [nil 1 2 nil 4 2]
+                   [nil 3 5 7 2 1]
+                   [nil nil 8 9 6 nil]
+                   [nil 8 1 nil 1 5]
+                   [nil 9 6 nil 3 9]]]]
+    (is (= expected (logic-grid kakuro.test/grid1)))))
