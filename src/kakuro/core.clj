@@ -70,11 +70,14 @@
 (defn cell? [v]
   (instance? kakuro.core.Cell v))
 
+(s/def ::cells (s/coll-of cell? []))
+
 (defn transpose [m]
   (apply (partial mapv vector) m))
 
 (s/fdef solve-step
-        :args (s/cat :cells (s/spec (s/* cell?)) :total integer?))
+        :args (s/cat :cells ::cells
+                     :total integer?))
 
 (defn solve-step [cells total]
   (let [final (dec (count cells))
@@ -102,12 +105,12 @@
   (let [pairs (pair-target-with-values line)]
     (into [] (mapcat pair-solver pairs))))
 
-(s/fdef solve-row :args (s/cat :row (s/coll-of cell? [])))
+(s/fdef solve-row :args (s/cat :row ::cells))
 
 (defn solve-row [row]
   (solve-line row #(solve-pair :across %)))
 
-(s/fdef solve-column :args (s/cat :column (s/coll-of cell? [])))
+(s/fdef solve-column :args (s/cat :column ::cells))
 
 (defn solve-column [column]
   (solve-line column #(solve-pair :down %)))
