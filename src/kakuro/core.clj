@@ -1,6 +1,7 @@
 (ns kakuro.core
   (:require [clojure.pprint :as pp])
-  (:require [clojure.spec :as s]))
+  (:require [clojure.spec :as s])
+  (:require [clojure.spec.test]))
 
 (s/instrument-all)
 
@@ -124,6 +125,7 @@
 
 (defn solver [grid]
   (s/instrument-all)
+;;  (clojure.spec.test/run-all-tests)
   (let [g (solve-grid grid)]
     (if (= g grid)
       g
