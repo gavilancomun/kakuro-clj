@@ -102,8 +102,12 @@
   (let [pairs (pair-target-with-values line)]
     (into [] (mapcat pair-solver pairs))))
 
+(s/fdef solve-row :args (s/cat :row (s/coll-of cell? [])))
+
 (defn solve-row [row]
   (solve-line row #(solve-pair :across %)))
+
+(s/fdef solve-column :args (s/cat :column (s/coll-of cell? [])))
 
 (defn solve-column [column]
   (solve-line column #(solve-pair :down %)))
