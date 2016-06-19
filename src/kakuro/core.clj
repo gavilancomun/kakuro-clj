@@ -61,7 +61,7 @@
   (contains? (:values cell) n))
 
 (defn transpose [m]
-  (apply mapv vector m))
+  (apply (partial mapv vector) m))
 
 (defn solve-step [cells total]
   (let [final (dec (count cells))
@@ -72,10 +72,11 @@
          transpose
          (map #(->Value (into #{} %))))))
 
-(defn solve-pair [k [nvs vs]]
-  (if (seq vs)
-    (concat nvs (solve-step (into [] vs) (k (last nvs))))
-    nvs))
+(defn solve-pair [k pair]
+  (let [[nvs vs] pair]
+    (if (seq vs)
+      (concat nvs (solve-step (into [] vs) (k (last nvs))))
+      nvs)))
 
 (defn solve-line [line pair-solver]
   (let [pairs (partition-all 2 (partition-by #(= (type %) (type v)) line))]
