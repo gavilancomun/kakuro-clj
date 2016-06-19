@@ -1,5 +1,8 @@
 (ns kakuro.core
-  (:require [clojure.pprint :as pprint]))
+  (:require [clojure.pprint :as pp])
+  (:require [clojure.spec :as s]))
+
+(s/instrument-all)
 
 (defprotocol Cell
   (draw [this]))
@@ -41,6 +44,10 @@
 (defn a [n] (->Across n))
 (defn da [d a] (->DownAcross d a))
 
+(s/fdef all-different
+        :args (s/cat :nums (s/spec (s/* integer?)))
+        :ret boolean?)
+
 (defn all-different [nums]
   (= (count nums) (count (into #{} nums))))
 
@@ -60,8 +67,14 @@
 (defn is-possible? [cell n]
   (contains? (:values cell) n))
 
+(defn cell? [v]
+  (instance? kakuro.core.Cell v))
+
 (defn transpose [m]
   (apply (partial mapv vector) m))
+
+(s/fdef solve-step
+        :args (s/cat :cells (s/spec (s/* cell?)) :total integer?))
 
 (defn solve-step [cells total]
   (let [final (dec (count cells))
@@ -72,14 +85,21 @@
          transpose
          (map #(->Value (into #{} %))))))
 
-(defn solve-pair [k pair]
-  (let [[nvs vs] pair]
+(defn solve-pair [f pair]
+  (let [[nvs vs] pair
+        target (f (last nvs))]
     (if (seq vs)
-      (concat nvs (solve-step (into [] vs) (k (last nvs))))
+      (concat nvs (solve-step (into [] vs) target))
       nvs)))
 
+(defn gather-values [line]
+  (partition-by #(= (type %) (type v)) line))
+
+(defn pair-target-with-values [line]
+  (partition-all 2 (gather-values line)))
+
 (defn solve-line [line pair-solver]
-  (let [pairs (partition-all 2 (partition-by #(= (type %) (type v)) line))]
+  (let [pairs (pair-target-with-values line)]
     (into [] (mapcat pair-solver pairs))))
 
 (defn solve-row [row]
@@ -96,6 +116,7 @@
        transpose))
 
 (defn solver [grid]
+  (s/instrument-all)
   (let [g (solve-grid grid)]
     (if (= g grid)
       g
