@@ -1,6 +1,7 @@
 (ns kakuro.core
   (:require [clojure.pprint :as pp])
   (:require [clojure.spec :as s])
+  (:require [clojure.spec.gen :as gen])
   (:require [clojure.spec.test]))
 
 (s/instrument-all)
@@ -68,10 +69,15 @@
 (defn is-possible? [cell n]
   (contains? (:values cell) n))
 
+(defn gen-cell []
+  (s/gen #{e (d (rand-int 20)) (a (rand-int 20)) (da (rand-int 20) (rand-int 20)) v}))
+
 (defn cell? [v]
   (instance? kakuro.core.Cell v))
 
-(s/def ::cells (s/coll-of cell? []))
+(s/def ::cell (s/with-gen cell? gen-cell)) 
+
+(s/def ::cells (s/spec (s/* ::cell)))
 
 (defn transpose [m]
   (apply (partial mapv vector) m))
