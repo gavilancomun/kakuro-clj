@@ -1,4 +1,4 @@
-(ns sudoku
+(ns kakuro.sudoku
   (:refer-clojure :exclude [==])
   (:use clojure.core.logic)
   (:require [clojure.core.logic.fd :as fd]))
