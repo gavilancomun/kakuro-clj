@@ -35,8 +35,12 @@
 (defn draw-grid [grid]
   (apply str (map draw-row grid)))
 
-(def v (->Value #{1 2 3 4 5 6 7 8 9}))
-(def e (->Empty))
+(defn v [& args]
+  (if (= 0 (count args))
+    (->Value #{1 2 3 4 5 6 7 8 9})
+    (->Value (into #{} args))))
+
+(defn e [] (->Empty))
 (defn d [n] (->Down n))
 (defn a [n] (->Across n))
 (defn da [d a] (->DownAcross d a))
@@ -77,8 +81,14 @@
     (concat nvs (solve-step (into [] vs) (k (last nvs))))
     nvs))
 
+(defn gather-values [line]
+  (partition-by #(instance? Value %) line))
+
+(defn pair-targets-with-values [line]
+  (partition-all 2 (gather-values line)))
+
 (defn solve-line [line pair-solver]
-  (let [pairs (partition-all 2 (partition-by #(= (type %) (type v)) line))]
+  (let [pairs (pair-targets-with-values line)]
     (into [] (mapcat pair-solver pairs))))
 
 (defn solve-row [row]
