@@ -79,6 +79,17 @@
     (is (= (e) (-> result rest rest first second)))
     (is (= (a 4) (-> result rest rest first rest rest first)))))
 
+(deftest test-pairtargets
+  (let [line [(da 3 4) (v) (v) (d 4) (e) (a 4) (v) (v)]
+        result (pair-targets-with-values line)]
+    (print "pair ")
+    (println result)
+    (is (= 2 (count result)))
+    (is (= (da 3 4) (->> result first first first)))
+    (is (= (d 4) (->> result second first first)))
+    (is (= (e) (->> result second first second)))
+    (is (= (a 4) (->> result second first rest rest first)))))
+
 (deftest test-grid1
   (let [solved (solver grid1)
         result (-> grid1 solver draw-grid)
