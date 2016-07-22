@@ -1,5 +1,11 @@
+# Vim
 *.swp
 *~
+# Idea
+*.iml
+.idea/
+# mvn
 target/
+# clojure
 .lein*
 .nrepl*
