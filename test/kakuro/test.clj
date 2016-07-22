@@ -125,4 +125,3 @@
         expected "     2         1    \n"]
     (is (= expected (.substring result (- (count result) (count expected)))))))
 
-
