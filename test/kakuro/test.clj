@@ -1,9 +1,5 @@
 (ns kakuro.test
   (:require [clojure.test :refer :all]
-            [clojure.test.check :as tc]
-            [clojure.test.check.generators :as gen]
-            [clojure.test.check.properties :as prop]
-            [clojure.test.check.clojure-test :as ct]
             [kakuro.core :refer :all]))
 
 (def grid1 [
@@ -101,6 +97,17 @@
     (is (= (v 1 2) (second result)))
     (is (= (v 1 2) (nth result 2)))))
 
+(def test-solveline
+  (let [line [(da 3 4) (v) (v) (d 4) (e) (a 5) (v) (v)]
+        result (solve-line line #(solve-pair :across %))]
+    (print "solve line ")
+    (println result)
+    (is (= 8 (count result)))
+    (is (= (v 1 3) (second result)))
+    (is (= (v 1 3) (nth result 2)))
+    (is (= (v 1 2 3 4) (nth result 6)))
+    (is (= (v 1 2 3 4) (nth result 7)))))
+
 (deftest test-grid1
   (let [solved (solver grid1)
         result (-> grid1 solver draw-grid)
@@ -113,9 +120,4 @@
         expected "     2         1    \n"]
     (is (= expected (.substring result (- (count result) (count expected)))))))
 
-(ct/defspec test-transpose
-  100
-  (prop/for-all [vv (gen/not-empty (gen/vector (gen/vector
-                                                 gen/int (first (gen/sample (gen/choose 0 10) 1))) (first (gen/sample (gen/choose 0 10) 1))))]
-    (= vv (-> vv transpose transpose))))
 
