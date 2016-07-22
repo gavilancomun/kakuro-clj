@@ -24,23 +24,15 @@
         result (draw-row line)]
     (print "drawrow")
     (println result)
-    (->> result
-         (= "    3\\ 4   123456789 12.......    4\\--     -----     --\\ 5       4         1    \n")
-         (is))))
+    (is (= "    3\\ 4   123456789 12.......    4\\--     -----     --\\ 5       4         1    \n" result))))
 
 (deftest permutes
   (let [vs [(v) (v) (v)]
         results (permute-all vs 6)
         diff (filter all-different results)]
     (println results)
-    (->> results
-         count
-         (= 10)
-         (is))
-    (->> diff
-         count
-         (= 6)
-         (is))))
+    (is (= 10 (count results)))
+    (is (= 6 (count diff)))))
 
 (deftest transposes
   (let [ints [[1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]]
