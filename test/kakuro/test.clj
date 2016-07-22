@@ -2,14 +2,12 @@
   (:require [clojure.test :refer :all]
             [kakuro.core :refer :all]))
 
-(def grid1 [
-            [(e) (d 4) (d 22) (e) (d 16) (d 3)]
+(def grid1 [[(e) (d 4) (d 22) (e) (d 16) (d 3)]
             [(a 3) (v) (v) (da 16 6) (v) (v)]
             [(a 18) (v) (v) (v) (v) (v)]
             [(e) (da 17 23) (v) (v) (v) (d 14)]
             [(a 9) (v) (v) (a 6) (v) (v)]
-            [(a 15) (v) (v) (a 12) (v) (v)]
-           ])
+            [(a 15) (v) (v) (a 12) (v) (v)]])
 
 (def grid2 [[(e) (d 23) (d 30) (e) (e) (d 27) (d 12) (d 16)]
             [(a 16) (v) (v) (e) (da 17 24) (v) (v) (v)]
@@ -108,12 +106,27 @@
     (is (= (v 1 2 3 4) (nth result 6)))
     (is (= (v 1 2 3 4) (nth result 7)))))
 
-(deftest test-grid1
-  (let [solved (solver grid1)
-        result (-> grid1 solver draw-grid)
-        expected "     3         9    \n"]
+(deftest test-row
+  (let [result (solve-row [(a 3) (v 1 2 3) (v 1)])]
+    (print "solve row ")
     (println result)
-    (is (= expected (.substring result (- (count result) (count expected)))))))
+    (is (= (v 2) (second result)))
+    (is (= (v 1) (nth result 2)))))
+
+(deftest test-col
+    (let [result (solve-column [(da 3 12) (v 1 2 3) (v 1)])]
+    (print "solve col ")
+    (println result)
+    (is (= (v 2) (second result)))
+    (is (= (v 1) (nth result 2)))))
+
+(deftest test-grid
+  (let [result (solver grid1)]
+    (is (= "   --\\ 3       1         2       16\\ 6       4         2    \n" (draw-row (second result))))
+    (is (= "   --\\18       3         5         7         2         1    \n" (draw-row (nth result 2))))
+    (is (= "   -----     17\\23       8         9         6       14\\--  \n" (draw-row (nth result 3))))
+    (is (= "   --\\ 9       8         1       --\\ 6       1         5    \n" (draw-row (nth result 4))))
+    (is (= "   --\\15       9         6       --\\12       3         9    \n" (draw-row (nth result 5))))))
 
 (deftest test-grid2
   (let [result (-> grid2 solver draw-grid)
