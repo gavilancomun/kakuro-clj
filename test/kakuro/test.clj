@@ -89,7 +89,7 @@
 
 (def test-solveline
   (let [line [(da 3 4) (v) (v) (d 4) (e) (a 5) (v) (v)]
-        result (solve-line line #(solve-pair :across %))]
+        result (solve-line line :across)]
     (print "solve line ")
     (println result)
     (is (= 8 (count result)))

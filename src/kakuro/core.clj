@@ -87,15 +87,15 @@
 (defn pair-targets-with-values [line]
   (partition-all 2 (gather-values line)))
 
-(defn solve-line [line pair-solver]
+(defn solve-line [line f]
   (let [pairs (pair-targets-with-values line)]
-    (into [] (mapcat pair-solver pairs))))
+    (into [] (mapcat (partial solve-pair f) pairs))))
 
 (defn solve-row [row]
-  (solve-line row (partial solve-pair :across)))
+  (solve-line row :across))
 
 (defn solve-column [column]
-  (solve-line column (partial solve-pair :down)))
+  (solve-line column :down))
 
 (defn solve-grid [grid]
   (->> grid
