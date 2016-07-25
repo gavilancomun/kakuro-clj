@@ -8,3 +8,6 @@ There are two solvers
 * functional in core.clj
 * core.logic based in logic.clj
 
+## Test
+lein test
+

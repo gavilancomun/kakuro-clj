@@ -76,13 +76,13 @@
          transpose
          (map #(->Value (into #{} %))))))
 
-(defn solve-pair [k [nvs vs]]
+(defn solve-pair [f [nvs vs]]
   (if (seq vs)
-    (concat nvs (solve-step (into [] vs) (k (last nvs))))
+    (concat nvs (solve-step (into [] vs) (f (last nvs))))
     nvs))
 
 (defn gather-values [line]
-  (partition-by #(instance? Value %) line))
+  (partition-by (partial instance? Value) line))
 
 (defn pair-targets-with-values [line]
   (partition-all 2 (gather-values line)))
@@ -92,10 +92,10 @@
     (into [] (mapcat pair-solver pairs))))
 
 (defn solve-row [row]
-  (solve-line row #(solve-pair :across %)))
+  (solve-line row (partial solve-pair :across)))
 
 (defn solve-column [column]
-  (solve-line column #(solve-pair :down %)))
+  (solve-line column (partial solve-pair :down)))
 
 (defn solve-grid [grid]
   (->> grid
