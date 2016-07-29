@@ -54,7 +54,7 @@
     1 (map vector (first colls))
     (let [head (first colls)
           tail-prod (product (rest colls))]
-      (into [] (mapcat (fn [x] (mapv #(into [] (cons x %)) tail-prod)) head)))))
+      (into [] (mapcat (fn [x] (map #(into [x] %) tail-prod)) head)))))
 
 (defn permute-all [vs target]
   (let [values (map :values vs)
