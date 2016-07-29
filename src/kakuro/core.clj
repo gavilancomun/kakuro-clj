@@ -48,6 +48,14 @@
 (defn all-different [nums]
   (= (count nums) (count (into #{} nums))))
 
+(defn product [colls]
+  (condp = (count colls)
+    0 []
+    1 (map vector (first colls))
+    (let [head (first colls)
+          tail-prod (product (rest colls))]
+      (into [] (mapcat (fn [x] (mapv #(into [] (cons x %)) tail-prod)) head)))))
+
 (defn permute [vs target so-far]
   (if (>= target 1)
     (if (= (count so-far) (dec (count vs)))
@@ -61,6 +69,11 @@
 (defn permute-all [vs total]
   (permute vs total []))
 
+(defn permute-all2 [vs target]
+  (let [values (map :values vs)
+        products (product values)]
+    (into [] (filter #(= target (apply + %)) products))))
+
 (defn is-possible? [cell n]
   (contains? (:values cell) n))
 
@@ -69,7 +82,7 @@
 
 (defn solve-step [cells total]
   (let [final (dec (count cells))
-        perms (->> (permute-all cells total)
+        perms (->> (permute-all2 cells total)
          (filter #(is-possible? (get cells final) (get % final)))
          (filter all-different))]
     (->> perms
