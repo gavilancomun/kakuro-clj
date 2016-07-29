@@ -19,11 +19,25 @@
             [(a 6) (v) (v) (v) (e) (a 3) (v) (v)]
             ])
 
+(deftest draw-empty
+  (is (= "   -----  " (draw (e)))))
+
+(deftest draw-across
+  (is (= "   --\\ 5  " (draw (a 5)))))
+
+(deftest draw-down
+  (is (= "    4\\--  " (draw (d 4)))))
+
+(deftest draw-down-across
+  (is (= "    3\\ 4  " (draw (da 3 4)))))
+
+(deftest draw-values
+  (is (= " 123456789" (draw (v))))
+  (is (= " 12......." (draw (v 1 2)))))
+
 (deftest drawrow
   (let [line [(da 3 4) (v) (v 1 2) (d 4) (e) (a 5) (v 4) (v 1)]
         result (draw-row line)]
-    (print "drawrow")
-    (println result)
     (is (= "    3\\ 4   123456789 12.......    4\\--     -----     --\\ 5       4         1    \n" result))))
 
 (deftest permutes
@@ -37,8 +51,6 @@
 (deftest transposes
   (let [ints [[1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]]
         tr (transpose ints)]
-    (println ints)
-    (println tr)
     (is (= (count ints) (count (first tr))))
     (is (= (count (first ints)) (count tr)))))
 
@@ -100,15 +112,11 @@
 
 (deftest test-row
   (let [result (solve-row [(a 3) (v 1 2 3) (v 1)])]
-    (print "solve row ")
-    (println result)
     (is (= (v 2) (second result)))
     (is (= (v 1) (nth result 2)))))
 
 (deftest test-col
     (let [result (solve-column [(da 3 12) (v 1 2 3) (v 1)])]
-    (print "solve col ")
-    (println result)
     (is (= (v 2) (second result)))
     (is (= (v 1) (nth result 2)))))
 
