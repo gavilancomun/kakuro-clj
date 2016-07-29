@@ -56,20 +56,7 @@
           tail-prod (product (rest colls))]
       (into [] (mapcat (fn [x] (mapv #(into [] (cons x %)) tail-prod)) head)))))
 
-(defn permute [vs target so-far]
-  (if (>= target 1)
-    (if (= (count so-far) (dec (count vs)))
-      [(conj so-far target)]
-      (->> (get vs (count so-far))
-           :values
-           (mapcat #(permute vs (- target %) (conj so-far %)))
-           (into [])))
-    []))
-
-(defn permute-all [vs total]
-  (permute vs total []))
-
-(defn permute-all2 [vs target]
+(defn permute-all [vs target]
   (let [values (map :values vs)
         products (product values)]
     (into [] (filter #(= target (apply + %)) products))))
@@ -82,7 +69,7 @@
 
 (defn solve-step [cells total]
   (let [final (dec (count cells))
-        perms (->> (permute-all2 cells total)
+        perms (->> (permute-all cells total)
          (filter #(is-possible? (get cells final) (get % final)))
          (filter all-different))]
     (->> perms
