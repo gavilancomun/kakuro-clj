@@ -64,6 +64,10 @@
     (is (= true (is-possible? vc 2)))
     (is (= false (is-possible? vc 4)))))
 
+(deftest value-equality
+  (is (= (v) (v)))
+  (is (= (v 1 2) (v 1 2))))
+
 (deftest test-solvestep
   (let [result (solve-step [(v 1 2) (v)] 5)]
     (print "solve step result ")
