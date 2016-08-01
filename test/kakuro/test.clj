@@ -40,6 +40,11 @@
         result (draw-row line)]
     (is (= "    3\\ 4   123456789 12.......    4\\--     -----     --\\ 5       4         1    \n" result))))
 
+(deftest products
+  (let [data [[1 2] [10] [100 200 300]]
+        expected [[1 10 100] [1 10 200] [1 10 300] [2 10 100] [2 10 200] [2 10 300]]]
+    (is (= expected (product data)))))
+
 (deftest permutes
   (let [vs [(v) (v) (v)]
         results (permute-all vs 6)
@@ -58,6 +63,10 @@
   (let [vc (v 1 2 3)]
     (is (= true (is-possible? vc 2)))
     (is (= false (is-possible? vc 4)))))
+
+(deftest value-equality
+  (is (= (v) (v)))
+  (is (= (v 1 2) (v 1 2))))
 
 (deftest test-solvestep
   (let [result (solve-step [(v 1 2) (v)] 5)]
