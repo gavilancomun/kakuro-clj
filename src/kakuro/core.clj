@@ -81,15 +81,20 @@
     (concat nvs (solve-step (into [] vs) (f (last nvs))))
     nvs))
 
-(defn gather-values [line]
-  (partition-by (partial instance? Value) line))
+(defn gather-values 
+  ([line] (partition-by (partial instance? Value) line))
+  ([] (partition-by (partial instance? Value))))
 
-(defn pair-targets-with-values [line]
-  (partition-all 2 (gather-values line)))
+(defn pair-targets-with-values []
+  (comp 
+    (gather-values)
+    (partition-all 2)))
 
 (defn solve-line [line f]
-  (let [pairs (pair-targets-with-values line)]
-    (into [] (mapcat (partial solve-pair f) pairs))))
+  (into [] (comp 
+             (pair-targets-with-values)
+             (mapcat (partial solve-pair f)))
+        line))
 
 (defn solve-row [row]
   (solve-line row :across))
@@ -105,6 +110,7 @@
        transpose))
 
 (defn solver [grid]
+  (println (draw-grid grid))
   (let [g (solve-grid grid)]
     (if (= g grid)
       g
