@@ -47,7 +47,7 @@
 
 (deftest permutes
   (let [vs [(v) (v) (v)]
-        results (permute-all vs 6)
+        results (permute-all 6 vs)
         diff (filter all-different results)]
     (println results)
     (is (= 10 (count results)))

@@ -56,7 +56,7 @@
           tail-prod (product (rest colls))]
       (into [] (mapcat (fn [x] (map #(into [x] %) tail-prod)) head)))))
 
-(defn permute-all [vs target]
+(defn permute-all [target vs]
   (let [values (map :values vs)
         products (product values)]
     (into [] (filter #(= target (apply + %)) products))))
@@ -69,10 +69,11 @@
 
 (defn solve-step [cells total]
   (let [final (dec (count cells))
-        perms (->> (permute-all cells total)
-         (filter #(is-possible? (get cells final) (get % final)))
-         (filter all-different))]
-    (->> perms
+        final-cell (get cells final)]
+    (->> cells 
+         (permute-all total)
+         (filter #(is-possible? final-cell (get % final)))
+         (filter all-different)
          transpose
          (map #(->Value (into #{} %))))))
 
