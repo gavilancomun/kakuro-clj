@@ -54,12 +54,16 @@
     1 (map vector (first colls))
     (let [head (first colls)
           tail-prod (product (rest colls))]
-      (into [] (mapcat (fn [x] (map #(into [x] %) tail-prod)) head)))))
+      (into []
+            (mapcat (fn [x] (map #(into [x] %) tail-prod)))
+            head))))
 
 (defn permute-all [target vs]
   (let [values (map :values vs)
         products (product values)]
-    (into [] (filter #(= target (apply + %)) products))))
+    (into []
+          (filter #(= target (apply + %)))
+          products)))
 
 (defn is-possible? [cell n]
   (contains? (:values cell) n))
@@ -67,19 +71,29 @@
 (defn transpose [m]
   (apply mapv vector m))
 
-(defn solve-step [cells total]
+(defn transpose-reducing
+  ([] [])
+  ([acc v]
+   (into [] (map-indexed
+              (fn [i x] (vec (conj (get acc i) x))))
+         v)))
+
+(defn transpose-r [m]
+  (reduce transpose-reducing [] m))
+
+(defn solve-step [total cells]
   (let [final (dec (count cells))
         final-cell (get cells final)]
     (->> cells 
          (permute-all total)
          (filter #(is-possible? final-cell (get % final)))
          (filter all-different)
-         transpose
+         transpose-r
          (map #(->Value (into #{} %))))))
 
 (defn solve-pair [f [nvs vs]]
   (if (seq vs)
-    (concat nvs (solve-step (into [] vs) (f (last nvs))))
+    (concat nvs (solve-step (f (last nvs)) (into [] vs)))
     nvs))
 
 (def gather-values
