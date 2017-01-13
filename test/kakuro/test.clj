@@ -77,7 +77,7 @@
 
 (deftest test-gather
   (let [line [(da 3 4) (v) (v) (d 4) (e) (a 4) (v) (v)]
-        result (gather-values line)]
+        result (into [] (gather-values) line)]
     (print "gather ")
     (println result)
     (is (= 4 (count result)))

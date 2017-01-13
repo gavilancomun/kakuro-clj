@@ -81,9 +81,8 @@
     (concat nvs (solve-step (into [] vs) (f (last nvs))))
     nvs))
 
-(defn gather-values 
-  ([line] (partition-by (partial instance? Value) line))
-  ([] (partition-by (partial instance? Value))))
+(defn gather-values []
+  (partition-by (partial instance? Value)))
 
 (defn pair-targets-with-values []
   (comp 
