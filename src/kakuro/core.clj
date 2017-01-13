@@ -89,17 +89,16 @@
     gather-values
     (partition-all 2)))
 
-(defn solve-line [line f]
-  (into [] (comp 
-             pair-targets-with-values
-             (mapcat (partial solve-pair f)))
-        line))
+(defn solve-line [f]
+  (comp 
+    pair-targets-with-values
+    (mapcat (partial solve-pair f))))
 
 (defn solve-row [row]
-  (solve-line row :across))
+  (into [] (solve-line :across) row))
 
 (defn solve-column [column]
-  (solve-line column :down))
+  (into [] (solve-line :down) column))
 
 (defn solve-grid [grid]
   (->> grid
