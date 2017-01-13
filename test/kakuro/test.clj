@@ -77,7 +77,7 @@
 
 (deftest test-gather
   (let [line [(da 3 4) (v) (v) (d 4) (e) (a 4) (v) (v)]
-        result (into [] (gather-values) line)]
+        result (into [] gather-values line)]
     (print "gather ")
     (println result)
     (is (= 4 (count result)))
@@ -88,7 +88,7 @@
 
 (deftest test-pairtargets
   (let [line [(da 3 4) (v) (v) (d 4) (e) (a 4) (v) (v)]
-        result (into [] (pair-targets-with-values) line)]
+        result (into [] pair-targets-with-values line)]
     (print "pair ")
     (println result)
     (is (= 2 (count result)))
@@ -99,7 +99,7 @@
 
 (deftest test-solvepair
   (let [line [(da 3 4) (v) (v) (d 4) (e) (a 4) (v) (v)]
-        pairs (into [] (pair-targets-with-values) line)
+        pairs (into [] pair-targets-with-values line)
         pair (first pairs)
         result (solve-pair :down pair)]
     (print "solvePair ")

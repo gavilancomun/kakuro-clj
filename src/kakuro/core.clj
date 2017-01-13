@@ -81,17 +81,17 @@
     (concat nvs (solve-step (into [] vs) (f (last nvs))))
     nvs))
 
-(defn gather-values []
+(def gather-values
   (partition-by (partial instance? Value)))
 
-(defn pair-targets-with-values []
+(def pair-targets-with-values
   (comp 
-    (gather-values)
+    gather-values
     (partition-all 2)))
 
 (defn solve-line [line f]
   (into [] (comp 
-             (pair-targets-with-values)
+             pair-targets-with-values
              (mapcat (partial solve-pair f)))
         line))
 
