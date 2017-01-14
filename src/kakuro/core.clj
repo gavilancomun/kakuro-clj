@@ -48,16 +48,6 @@
 (defn all-different [nums]
   (= (count nums) (count (into #{} nums))))
 
-(defn product [colls]
-  (condp = (count colls)
-    0 []
-    1 (map vector (first colls))
-    (let [head (first colls)
-          tail-prod (product (rest colls))]
-      (into []
-            (mapcat (fn [x] (map #(into [x] %) tail-prod)))
-            head))))
-
 (defn product-reducing 
   ([] [])
   ([acc v]
@@ -67,14 +57,14 @@
            y v]
        (conj (vec x) y)))))
 
-(defn product-r [colls]
+(defn product [colls]
   (reduce product-reducing [] colls))
 
 (defn permute-all [target vs]
   (into []
         (->> vs
              (map :values)
-             product-r
+             product
              (filter #(= target (apply + %))))))
 
 (defn is-possible? [cell n]
