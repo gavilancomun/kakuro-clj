@@ -58,12 +58,24 @@
             (mapcat (fn [x] (map #(into [x] %) tail-prod)))
             head))))
 
+(defn product-reducing 
+  ([] [])
+  ([acc v]
+   (if (= 0 (count acc))
+     (mapv vector v)
+     (for [x acc
+           y v]
+       (conj (vec x) y)))))
+
+(defn product-r [colls]
+  (reduce product-reducing [] colls))
+
 (defn permute-all [target vs]
-  (let [values (map :values vs)
-        products (product values)]
-    (into []
-          (filter #(= target (apply + %)))
-          products)))
+  (into []
+        (->> vs
+             (map :values)
+             product-r
+             (filter #(= target (apply + %))))))
 
 (defn is-possible? [cell n]
   (contains? (:values cell) n))

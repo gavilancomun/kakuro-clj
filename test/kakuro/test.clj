@@ -45,6 +45,11 @@
         expected [[1 10 100] [1 10 200] [1 10 300] [2 10 100] [2 10 200] [2 10 300]]]
     (is (= expected (product data)))))
 
+(deftest products2
+  (let [data [[1 2] [10] [100 200 300]]
+        expected [[1 10 100] [1 10 200] [1 10 300] [2 10 100] [2 10 200] [2 10 300]]]
+    (is (= expected (product-r data)))))
+
 (deftest permutes
   (let [vs [(v) (v) (v)]
         results (permute-all 6 vs)
