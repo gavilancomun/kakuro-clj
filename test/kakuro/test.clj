@@ -43,11 +43,14 @@
 (deftest products
   (let [data [[1 2] [10] [100 200 300]]
         expected [[1 10 100] [1 10 200] [1 10 300] [2 10 100] [2 10 200] [2 10 300]]]
-    (is (= expected (product data)))))
+    (is (= expected (permute-all data)))))
 
 (deftest permutes
   (let [vs [(v) (v) (v)]
-        results (permute-all 6 vs)
+        results (->> vs
+                     (map :values)
+                     permute-all
+                     (filter #(= 6 (apply + %))))
         diff (filter all-different results)]
     (println results)
     (is (= 10 (count results)))
@@ -58,11 +61,6 @@
         tr (transpose ints)]
     (is (= (count ints) (count (first tr))))
     (is (= (count (first ints)) (count tr)))))
-
-(deftest isposs
-  (let [vc (v 1 2 3)]
-    (is (= true (is-possible? vc 2)))
-    (is (= false (is-possible? vc 4)))))
 
 (deftest value-equality
   (is (= (v) (v)))

@@ -48,7 +48,7 @@
 (defn all-different [nums]
   (= (count nums) (count (into #{} nums))))
 
-(defn product-reducing 
+(defn permute-reducing 
   ([acc v]
    (if (= 0 (count acc))
      (mapv vector v)
@@ -56,18 +56,8 @@
            y v]
        (conj (vec x) y)))))
 
-(defn product [colls]
-  (reduce product-reducing [] colls))
-
-(defn permute-all [target vs]
-  (into []
-        (->> vs
-             (map :values)
-             product
-             (filter #(= target (apply + %))))))
-
-(defn is-possible? [cell n]
-  (contains? (:values cell) n))
+(defn permute-all [colls]
+  (reduce permute-reducing [] colls))
 
 ;;(defn transpose [m]
 ;;  (apply mapv vector m))
@@ -86,8 +76,9 @@
   (let [final (dec (count cells))
         final-cell (get cells final)]
     (->> cells 
-         (permute-all total)
-         (filter #(is-possible? final-cell (get % final)))
+         (map :values)
+         permute-all
+         (filter #(= total (apply + %)))
          (filter all-different)
          transpose
          (map #(->Value (into #{} %))))))
