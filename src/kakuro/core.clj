@@ -49,7 +49,6 @@
   (= (count nums) (count (into #{} nums))))
 
 (defn product-reducing 
-  ([] [])
   ([acc v]
    (if (= 0 (count acc))
      (mapv vector v)
@@ -59,48 +58,6 @@
 
 (defn product [colls]
   (reduce product-reducing [] colls))
-
-(defn trace [s x]
-  (println "trace" s x)
-  (str x s))
-
-(defn steps []
-  [(->> [1 2 3]
-        (map (partial trace "a"))
-        (map (partial trace "b"))
-        (map (partial trace "c")))
-   (into []
-         (comp
-           (map (partial trace "x"))
-           (map (partial trace "y"))
-           (map (partial trace "z")))
-         [1 2 3])])
-
-(defn test-red
-  ([] [])
-  ([result] result)
-  ([result input]
-   (println "test-red" input)
-   result))
-
-(defn trans-it [f]
-  (fn [rf]
-    (fn 
-      ([] (println "trans-it init") (rf))
-      ([result]
-       (println "trans-it complete" )
-       (rf result))
-      ([result input]
-       (println "trans-it" input)
-       (rf (f result input) input)))))
-
-(defn steps2 []
-  (into []
-        (comp
-          (map (partial trace "a"))
-          (trans-it test-red)
-          (map (partial trace "b"))) 
-        [1 2 3]))
 
 (defn permute-all [target vs]
   (into []
@@ -112,8 +69,8 @@
 (defn is-possible? [cell n]
   (contains? (:values cell) n))
 
-(defn transpose [m]
-  (apply mapv vector m))
+;;(defn transpose [m]
+;;  (apply mapv vector m))
 
 (defn transpose-reducing
   ([] [])
@@ -122,7 +79,7 @@
               (fn [i x] (vec (conj (get acc i) x))))
          v)))
 
-(defn transpose-r [m]
+(defn transpose [m]
   (reduce transpose-reducing [] m))
 
 (defn solve-step [total cells]
@@ -132,7 +89,7 @@
          (permute-all total)
          (filter #(is-possible? final-cell (get % final)))
          (filter all-different)
-         transpose-r
+         transpose
          (map #(->Value (into #{} %))))))
 
 (defn solve-pair [f [nvs vs]]

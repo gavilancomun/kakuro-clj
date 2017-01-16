@@ -59,12 +59,6 @@
     (is (= (count ints) (count (first tr))))
     (is (= (count (first ints)) (count tr)))))
 
-(deftest transposes-r
-  (let [ints [[1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]]
-        tr (transpose-r ints)]
-    (is (= (count ints) (count (first tr))))
-    (is (= (count (first ints)) (count tr)))))
-
 (deftest isposs
   (let [vc (v 1 2 3)]
     (is (= true (is-possible? vc 2)))
