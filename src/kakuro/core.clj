@@ -48,17 +48,6 @@
 (defn all-different [nums]
   (= (count nums) (count (into #{} nums))))
 
-(defn permute-reducing 
-  ([acc v]
-   (if (= 0 (count acc))
-     (mapv vector v)
-     (for [x acc
-           y v]
-       (conj (vec x) y)))))
-
-(defn permute-all [colls]
-  (reduce permute-reducing [] colls))
-
 ;;(defn transpose [m]
 ;;  (apply mapv vector m))
 
@@ -79,16 +68,35 @@
        (reduced ret)
        ret)))
 
-(defn transpose-r [rf]
-  (let [my-result (atom (transpose-reducing))
-        rrf (preserving-reduced rf)]
-    (fn 
-      ([] (rf))
-      ([result]
+(defn create-transducer [f]
+  (fn [rf]
+    (let [my-result (atom (f))
+          rrf (preserving-reduced rf)]
+      (fn 
+        ([] (rf))
+        ([result]
          (reduce rrf result @my-result))
-      ([result input] 
-         (swap! my-result transpose-reducing input)
-         result))))
+        ([result input] 
+         (swap! my-result f input)
+         result)))))
+
+(def transpose-r 
+  (create-transducer transpose-reducing))
+
+(defn permute-reducing 
+  ([] [])
+  ([acc v]
+   (if (= 0 (count acc))
+     (mapv vector v)
+     (for [x acc
+           y v]
+       (conj (vec x) y)))))
+
+(defn permute-all [colls]
+  (reduce permute-reducing [] colls))
+
+(def permute-all-r
+  (create-transducer permute-reducing))
 
 (defn solve-step [total cells]
   (let [final (dec (count cells))

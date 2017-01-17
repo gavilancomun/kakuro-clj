@@ -56,6 +56,17 @@
     (is (= 10 (count results)))
     (is (= 6 (count diff)))))
 
+(deftest permutes
+  (let [vs [(v) (v) (v)]
+        results (->> vs
+                     (map :values)
+                     (into [] permute-all-r)
+                     (filter #(= 6 (apply + %))))
+        diff (filter all-different results)]
+    (println results)
+    (is (= 10 (count results)))
+    (is (= 6 (count diff)))))
+
 (deftest transposes
   (let [ints [[1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]]
         tr (transpose ints)]
@@ -63,10 +74,12 @@
     (is (= (count (first ints)) (count tr)))))
 
 (deftest transpose2
-  (let [ints [[1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]]
-        tr (into [] transpose-r ints)]
-    (is (= (count ints) (count (first tr))))
-    (is (= (count (first ints)) (count tr)))))
+  (let [data [[1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]]
+        tr (into [] transpose-r data)
+        tr2 (into [] transpose-r data)]
+    (is (= (count data) (count (first tr))))
+    (is (= (count (first data)) (count tr)))
+    (is (= tr tr2))))
 
 (deftest value-equality
   (is (= (v) (v)))
