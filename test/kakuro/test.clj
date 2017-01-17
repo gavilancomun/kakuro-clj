@@ -62,6 +62,12 @@
     (is (= (count ints) (count (first tr))))
     (is (= (count (first ints)) (count tr)))))
 
+(deftest transpose2
+  (let [ints [[1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]]
+        tr (into [] transpose-r ints)]
+    (is (= (count ints) (count (first tr))))
+    (is (= (count (first ints)) (count tr)))))
+
 (deftest value-equality
   (is (= (v) (v)))
   (is (= (v 1 2) (v 1 2))))

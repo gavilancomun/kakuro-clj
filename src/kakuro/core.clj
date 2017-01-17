@@ -72,6 +72,24 @@
 (defn transpose [m]
   (reduce transpose-reducing [] m))
 
+(defn ^:private preserving-reduced
+  [rf]
+  #(let [ret (rf %1 %2)]
+     (if (reduced? ret)
+       (reduced ret)
+       ret)))
+
+(defn transpose-r [rf]
+  (let [my-result (atom (transpose-reducing))
+        rrf (preserving-reduced rf)]
+    (fn 
+      ([] (rf))
+      ([result]
+         (reduce rrf result @my-result))
+      ([result input] 
+         (swap! my-result transpose-reducing input)
+         result))))
+
 (defn solve-step [total cells]
   (let [final (dec (count cells))
         final-cell (get cells final)]
